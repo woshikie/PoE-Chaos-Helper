@@ -43,7 +43,7 @@ class CollectionPieceCounter extends StatelessWidget {
     return Colors.transparent;
   }
 
-  final double splashRadius = 64.nsp;
+  // final double splashRadius = 64.nsp;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,7 +55,7 @@ class CollectionPieceCounter extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                  splashRadius: splashRadius,
+                  //splashRadius: splashRadius,
                   icon: Icon(Icons.add),
                   onPressed: _add,
                 ),
@@ -73,13 +73,13 @@ class CollectionPieceCounter extends StatelessWidget {
             width: 24.w,
           ),
           IconButton(
-            splashRadius: splashRadius,
+            // splashRadius: splashRadius,
             icon: Icon(Icons.remove),
             onPressed: _remove,
           ),
           IconButton(
             color: Colors.red,
-            splashRadius: splashRadius,
+            // splashRadius: splashRadius,
             padding: EdgeInsets.zero,
             icon: Icon(Icons.clear),
             onPressed: _clear,
