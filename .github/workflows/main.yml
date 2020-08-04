@@ -11,7 +11,8 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        channel: 'beta'
+        flutter-version: '1.21.x'
+        channel: 'dev'
     - run: flutter pub get
     - run: flutter build apk --release --split-per-abi
     - name: Create a Release APK
