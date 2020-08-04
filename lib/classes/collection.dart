@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:poe_chaos_helper/classes/collection_piece.dart';
+import 'package:poe_chaos_helper/constants.dart';
 
 part 'collection.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Collection {
+  static const String _PREFS_KEY = 'COLLECTION';
   final List<CollectionPiece> pieces;
   static final _template = [
     CollectionPiece(name: 'Helmet'),
@@ -19,11 +22,20 @@ class Collection {
     CollectionPiece(name: 'Weapon (1h)', setCount: 2),
     CollectionPiece(name: 'Weapon (2h)'),
   ];
-  Collection({List<CollectionPiece> pieces}) : pieces = pieces == null ? _template : pieces;
-
+  Collection({List<CollectionPiece> pieces}) : pieces = pieces ?? _template;
   factory Collection.fromJson(Map<String, dynamic> json) => _$CollectionFromJson(json);
-
   Map<String, dynamic> toJson() => _$CollectionToJson(this);
+
+  static Future<Collection> fromSharedPrefs() async {
+    String jsonStr = (await Constants.gPREFS).getString(_PREFS_KEY);
+    if (jsonStr != null) return Collection.fromJson(json.decode(jsonStr));
+    return Collection();
+  }
+
+  static Future<void> toSharedPrefs(Collection collection) async {
+    String jsonStr = json.encode(collection.toJson());
+    (await Constants.gPREFS).setString(_PREFS_KEY, jsonStr);
+  }
 
   /// Returns weapon set count
   int get _weaponSetCount {
