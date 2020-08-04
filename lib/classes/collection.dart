@@ -1,9 +1,14 @@
 import 'dart:math';
 
+import 'package:json_annotation/json_annotation.dart';
 import 'package:poe_chaos_helper/classes/collection_piece.dart';
 
+part 'collection.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class Collection {
-  final List<CollectionPiece> pieces = [
+  final List<CollectionPiece> pieces;
+  static final _template = [
     CollectionPiece(name: 'Helmet'),
     CollectionPiece(name: 'Amulet'),
     CollectionPiece(name: 'Body Armour'),
@@ -14,6 +19,11 @@ class Collection {
     CollectionPiece(name: 'Weapon (1h)', setCount: 2),
     CollectionPiece(name: 'Weapon (2h)'),
   ];
+  Collection({List<CollectionPiece> pieces}) : pieces = pieces == null ? _template : pieces;
+
+  factory Collection.fromJson(Map<String, dynamic> json) => _$CollectionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CollectionToJson(this);
 
   /// Returns weapon set count
   int get _weaponSetCount {

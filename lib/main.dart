@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:poe_chaos_helper/constants.dart';
 import 'package:poe_chaos_helper/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  gPREFS = await SharedPreferences.getInstance();
   runApp(POEChaosHelper());
 }
 

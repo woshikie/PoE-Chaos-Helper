@@ -1,4 +1,9 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
+
+part 'collection_piece.g.dart';
+
+@JsonSerializable()
 
 /// Class describing a piece of collection. i.e. Helmet, Boots, Gloves
 class CollectionPiece {
@@ -16,6 +21,9 @@ class CollectionPiece {
     int setCount,
   })  : _count = count == null ? 0 : count,
         _setCount = setCount == null ? 1 : setCount;
+
+  factory CollectionPiece.fromJson(Map<String, dynamic> json) => _$CollectionPieceFromJson(json);
+  Map<String, dynamic> toJson() => _$CollectionPieceToJson(this);
 
   /// returns [true] if there is enough counts of this piece to be considered a set
   bool get hasSet {
