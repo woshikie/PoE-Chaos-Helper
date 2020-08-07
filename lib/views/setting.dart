@@ -158,11 +158,9 @@ class _SettingsState extends State<Settings> {
                         if (isChecked) {
                           if (!selectedTabs.contains(stashes[index].id)) {
                             selectedTabs.add(stashes[index].id);
-                            selectedTabsIndex.add(stashes[index].index);
                           }
                         } else {
                           selectedTabs.removeWhere((element) => (element == stashes[index].id));
-                          selectedTabsIndex.removeWhere((element) => (element == stashes[index].index));
                         }
                         onStashTabsUpdate();
                       },
@@ -313,6 +311,11 @@ class _SettingsState extends State<Settings> {
     setState(() {});
     SharedPreferences prefs = await Constants.gPREFS;
     prefs.setStringList(keyTabs, selectedTabs);
+    selectedTabsIndex.clear();
+    List<PoeCompactStash> selectedTabsList = stashes.where((element) => selectedTabs.contains(element.id)).toList();
+    for (PoeCompactStash stash in selectedTabsList) {
+      selectedTabsIndex.add(stash.index);
+    }
     prefs.setStringList(keyTabsIndex, selectedTabsIndex.map((e) => e.toString()).toList());
   }
 
