@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:poe_chaos_helper/classes/collection_piece.dart';
-import 'package:poe_chaos_helper/constants.dart';
+import 'package:poe_chaos_helper/classes/constants.dart';
 
 part 'collection.g.dart';
 
@@ -67,7 +67,7 @@ class Collection {
   void _removeWeaponSet({int times = 1}) {
     if (_weaponSetCount < times) return;
     int weapon1hSet = pieces[7].setCount;
-    int weapon2hSet = pieces[8].setCount;
+    // int weapon2hSet = pieces[8].setCount;
     if (weapon1hSet >= times)
       pieces[7].removeSet(times: times);
     else {
@@ -76,7 +76,8 @@ class Collection {
     }
   }
 
-  void clearAll() {
-    for (int i = 0; i < pieces.length; i++) pieces[i].count = 0;
+  void clearAll() async {
+    //for (int i = 0; i < pieces.length; i++) pieces[i].count = 0;
+    (await Constants.gPREFS).remove(_PREFS_KEY);
   }
 }

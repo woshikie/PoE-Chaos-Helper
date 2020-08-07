@@ -32,7 +32,11 @@ class CollectionPiece {
 
   /// returns number of set
   int get setCount {
-    return (_count / _setCount).floor();
+    try {
+      return (_count / _setCount).floor();
+    } catch (e) {
+      return 0;
+    }
   }
 
   /// returns current count

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:poe_chaos_helper/constants.dart';
-import 'package:poe_chaos_helper/home.dart';
+import 'package:poe_chaos_helper/classes/constants.dart';
+import 'package:poe_chaos_helper/views/home.dart';
 
 void main() {
   runApp(POEChaosHelper());

@@ -14,8 +14,9 @@ CollectionPiece _$CollectionPieceFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$CollectionPieceToJson(CollectionPiece instance) => <String, dynamic>{
+Map<String, dynamic> _$CollectionPieceToJson(CollectionPiece instance) =>
+    <String, dynamic>{
       'name': instance.name,
-      'setCount': instance._setCount,
+      'setCount': instance.setCount,
       'count': instance.count,
     };
