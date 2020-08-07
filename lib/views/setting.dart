@@ -222,7 +222,7 @@ class _SettingsState extends State<Settings> {
           poesessid = newVal;
         },
         action: IconButton(
-          icon: Icon(Icons.qr_code_scanner),
+          icon: Icon(Icons.qr_code),
           onPressed: () async {
             try {
               ScanResult result = await BarcodeScanner.scan();

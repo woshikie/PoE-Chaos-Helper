@@ -114,7 +114,7 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.settings_rounded),
+            icon: Icon(Icons.settings),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Settings()));
             },
