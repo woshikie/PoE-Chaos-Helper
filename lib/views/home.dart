@@ -26,6 +26,10 @@ class _HomeState extends State<Home> {
   bool get doFetch => _doFetch;
   set doFetch(bool newVal) {
     _doFetch = newVal;
+    startTimer();
+  }
+
+  void startTimer() {
     if (_doFetch && _timer == null) {
       _timer = Timer(Duration.zero, fetchAPI);
     }
@@ -37,7 +41,7 @@ class _HomeState extends State<Home> {
       return;
     }
     if (_prefs == null) _prefs = await Constants.gPREFS;
-    final List<String> selectedTabsIndex = _prefs.getStringList(Settings.KEY_TABS_INDEX);
+    final List<String> selectedTabsIndex = _prefs.getStringList(Settings.KEY_TABS_INDEX) ?? [];
     final String selectedLeague = _prefs.getString(Settings.KEY_SELECTED_LEAGUE);
     final String selectedRealm = _prefs.getString(Settings.KEY_REALM);
     final String accountName = _prefs.getString(Settings.KEY_ACCOUNT_NAME);
@@ -196,8 +200,14 @@ class _HomeState extends State<Home> {
             IconButton(
               icon: Icon(Icons.settings),
               onPressed: () {
+                bool isTimerNull = _timer == null;
+                if (!isTimerNull) {
+                  _timer.cancel();
+                  _timer = null;
+                }
                 Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Settings())).then((value) {
                   initSettings();
+                  if (!isTimerNull) startTimer();
                 });
               },
             ),

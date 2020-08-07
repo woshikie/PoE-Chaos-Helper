@@ -40,7 +40,7 @@ class OptionRowTextFormField extends StatelessWidget {
                 onPressed: onSave == null
                     ? null
                     : () {
-                        onSave(buffer);
+                        onSave(controller != null ? controller.text : buffer);
                       }),
           ],
         ),

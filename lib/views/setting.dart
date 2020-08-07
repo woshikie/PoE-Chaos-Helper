@@ -45,6 +45,7 @@ class _SettingsState extends State<Settings> {
       _poesessid = newVal;
     });
     PoeAPI.setPoeSessionID(newVal);
+    initStashTabs();
   }
 
   String _accountName;
@@ -57,6 +58,7 @@ class _SettingsState extends State<Settings> {
     Constants.gPREFS.then((value) {
       value.setString(keyAccountName, newVal);
     });
+    initStashTabs();
   }
 
   PoeCompactLeague _selectedLeague;
@@ -69,6 +71,7 @@ class _SettingsState extends State<Settings> {
     (Constants.gPREFS).then((pref) {
       pref.setString(keySelectedLeague, newVal.id);
     });
+    initStashTabs();
   }
 
   String _selectedRealm = 'pc';
@@ -81,6 +84,7 @@ class _SettingsState extends State<Settings> {
     (Constants.gPREFS).then((pref) {
       pref.setString(keyRealm, newVal);
     });
+    initStashTabs();
   }
 
   bool _isFetchAPI = false;
@@ -292,19 +296,23 @@ class _SettingsState extends State<Settings> {
   Future<void> initStashTabs() async {
     final required = [selectedLeague, selectedRealm, accountName];
     if (required.any((element) => (element == null))) return;
+    setState(() {
+      stashes = null;
+    });
     stashes = await PoeAPI.getStashTabs(
       league: selectedLeague.id,
       realm: selectedRealm,
       accountName: accountName,
     );
+    setState(() {});
   }
 
   Future<void> initSelectedStashTabs() async {
-    selectedTabs = (await Constants.gPREFS).getStringList(keyTabs);
+    selectedTabs = (await Constants.gPREFS).getStringList(keyTabs) ?? [];
   }
 
   Future<void> initSelectedStashTabsIndex() async {
-    selectedTabsIndex = (await Constants.gPREFS).getStringList(keyTabsIndex).map((e) => int.parse(e)).toList();
+    selectedTabsIndex = ((await Constants.gPREFS).getStringList(keyTabsIndex) ?? []).map((e) => int.parse(e)).toList();
   }
 
   Future<void> onStashTabsUpdate() async {
