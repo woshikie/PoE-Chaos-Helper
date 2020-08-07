@@ -3,7 +3,8 @@ import 'package:poe_chaos_helper/classes/constants.dart';
 import 'package:poe_chaos_helper/views/home.dart';
 
 void main() {
-  runApp(POEChaosHelper());
+  POEChaosHelper app = POEChaosHelper();
+  runApp(app);
 }
 
 class POEChaosHelper extends StatelessWidget {

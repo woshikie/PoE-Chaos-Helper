@@ -92,4 +92,28 @@ class PoeAPI {
       return null;
     }
   }
+
+  static Future<List<String>> getStashItems({
+    String league,
+    String realm,
+    String accountName,
+    String tabIndex,
+  }) async {
+    final Map<String, String> args = {
+      'league': league,
+      'realm': realm,
+      'accountName': accountName,
+      'tabs': '0',
+      'tabIndex': tabIndex,
+    };
+    final url = ENDPOINT + '/character-window/get-stash-items' + _argsToStr(args: args);
+    try {
+      var response = (await client.get(url, headers: _headers));
+      String responseTxt = response.body;
+      List<dynamic> items = json.decode(responseTxt)['items'];
+      return items.map((e) => e['icon'] as String).toList();
+    } catch (e) {
+      return null;
+    }
+  }
 }

@@ -7,30 +7,34 @@ import 'package:poe_chaos_helper/classes/api/poe_compact_stash.dart';
 import 'package:poe_chaos_helper/classes/constants.dart';
 import 'package:poe_chaos_helper/components/option_row.dart';
 import 'package:poe_chaos_helper/components/option_row_text_form_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
+  static const String KEY_FETCH_API = 'isFetchAPI';
+  static const String KEY_SELECTED_LEAGUE = 'selectedLeague';
+  static const String KEY_POESESSID = PoeAPI.SSID_PREF_KEY;
+  static const String KEY_ACCOUNT_NAME = 'accountName';
+  static const String KEY_REALM = 'selectedRealm';
+  static const String KEY_TABS = 'selectedTabs';
+  static const String KEY_TABS_INDEX = 'selectedTabsIndex';
   @override
   _SettingsState createState() => _SettingsState();
 }
 
 class _SettingsState extends State<Settings> {
-  static const String _KEY_FETCH_API = 'isFetchAPI';
-  static const String _KEY_SELECTED_LEAGUE = 'selectedLeague';
-  static const String _KEY_POESESSID = PoeAPI.SSID_PREF_KEY;
-  static const String _KEY_ACCOUNT_NAME = 'accountName';
-  static const String _KEY_REALM = 'selectedRealm';
-  static const String _KEY_TABS = 'selectedTabs';
+  static String get keyFetchAPI => Settings.KEY_FETCH_API;
+  static String get keySelectedLeague => Settings.KEY_SELECTED_LEAGUE;
+  static String get keyPoesessid => Settings.KEY_POESESSID;
+  static String get keyAccountName => Settings.KEY_ACCOUNT_NAME;
+  static String get keyRealm => Settings.KEY_REALM;
+  static String get keyTabs => Settings.KEY_TABS;
+  static String get keyTabsIndex => Settings.KEY_TABS_INDEX;
 
   static const List<String> _realms = ['pc', 'xbox', 'sony'];
   List<PoeCompactLeague> leagues;
   List<PoeCompactStash> stashes;
   List<String> selectedTabs = [];
-//  static const List<DropdownMenuItem> _templateStashTabs = [
-//    DropdownMenuItem(child: Text('Fetching...')),
-//    DropdownMenuItem(child: Text('Please Make sure')),
-//    DropdownMenuItem(child: Text('Both Account name')),
-//    DropdownMenuItem(child: Text('And POESESSID are set')),
-//  ];
+  List<int> selectedTabsIndex = [];
 
   TextEditingController _poesessidController = TextEditingController();
   String _poesessid;
@@ -51,7 +55,7 @@ class _SettingsState extends State<Settings> {
       _accountName = newVal;
     });
     Constants.gPREFS.then((value) {
-      value.setString(_KEY_ACCOUNT_NAME, newVal);
+      value.setString(keyAccountName, newVal);
     });
   }
 
@@ -63,7 +67,7 @@ class _SettingsState extends State<Settings> {
       _selectedLeague = newVal;
     });
     (Constants.gPREFS).then((pref) {
-      pref.setString(_KEY_SELECTED_LEAGUE, newVal.id);
+      pref.setString(keySelectedLeague, newVal.id);
     });
   }
 
@@ -75,7 +79,7 @@ class _SettingsState extends State<Settings> {
       _selectedRealm = newVal;
     });
     (Constants.gPREFS).then((pref) {
-      pref.setString(_KEY_REALM, newVal);
+      pref.setString(keyRealm, newVal);
     });
   }
 
@@ -86,7 +90,7 @@ class _SettingsState extends State<Settings> {
       _isFetchAPI = newVal;
     });
     (Constants.gPREFS).then((pref) {
-      pref.setBool(_KEY_FETCH_API, newVal);
+      pref.setBool(keyFetchAPI, newVal);
     });
     if (newVal) initOptions();
   }
@@ -152,9 +156,13 @@ class _SettingsState extends State<Settings> {
                       value: (selectedTabs.contains(stashes[index].id)),
                       onChanged: (isChecked) {
                         if (isChecked) {
-                          if (!selectedTabs.contains(stashes[index].id)) selectedTabs.add(stashes[index].id);
+                          if (!selectedTabs.contains(stashes[index].id)) {
+                            selectedTabs.add(stashes[index].id);
+                            selectedTabsIndex.add(stashes[index].index);
+                          }
                         } else {
                           selectedTabs.removeWhere((element) => (element == stashes[index].id));
+                          selectedTabsIndex.removeWhere((element) => (element == stashes[index].index));
                         }
                         onStashTabsUpdate();
                       },
@@ -248,6 +256,7 @@ class _SettingsState extends State<Settings> {
     ]);
     await initStashTabs();
     await initSelectedStashTabs();
+    await initSelectedStashTabsIndex();
     setState(() {});
   }
 
@@ -257,11 +266,11 @@ class _SettingsState extends State<Settings> {
   }
 
   Future<void> initFetchFromAPI() async {
-    isFetchAPI = (await Constants.gPREFS).getBool(_KEY_FETCH_API);
+    isFetchAPI = (await Constants.gPREFS).getBool(keyFetchAPI) ?? false;
   }
 
   Future<void> initSelectedLeague() async {
-    String selectedLeagueID = (await Constants.gPREFS).getString(_KEY_SELECTED_LEAGUE);
+    String selectedLeagueID = (await Constants.gPREFS).getString(keySelectedLeague);
     int needle = leagues.indexWhere((element) => element.id == selectedLeagueID);
     if (needle == -1)
       selectedLeague = leagues[0];
@@ -270,15 +279,15 @@ class _SettingsState extends State<Settings> {
   }
 
   Future<void> initSelectedRealm() async {
-    selectedRealm = (await Constants.gPREFS).getString(_KEY_REALM);
+    selectedRealm = (await Constants.gPREFS).getString(keyRealm);
   }
 
   Future<void> initAccountName() async {
-    accountName = (await Constants.gPREFS).getString(_KEY_ACCOUNT_NAME);
+    accountName = (await Constants.gPREFS).getString(keyAccountName);
   }
 
   Future<void> initPOESESSID() async {
-    poesessid = (await Constants.gPREFS).getString(_KEY_POESESSID);
+    poesessid = (await Constants.gPREFS).getString(keyPoesessid);
     _poesessidController.text = poesessid;
   }
 
@@ -293,23 +302,29 @@ class _SettingsState extends State<Settings> {
   }
 
   Future<void> initSelectedStashTabs() async {
-    selectedTabs = (await Constants.gPREFS).getStringList(_KEY_TABS);
+    selectedTabs = (await Constants.gPREFS).getStringList(keyTabs);
+  }
+
+  Future<void> initSelectedStashTabsIndex() async {
+    selectedTabsIndex = (await Constants.gPREFS).getStringList(keyTabsIndex).map((e) => int.parse(e)).toList();
   }
 
   Future<void> onStashTabsUpdate() async {
     setState(() {});
-    (await Constants.gPREFS).setStringList(_KEY_TABS, selectedTabs);
+    SharedPreferences prefs = await Constants.gPREFS;
+    prefs.setStringList(keyTabs, selectedTabs);
+    prefs.setStringList(keyTabsIndex, selectedTabsIndex.map((e) => e.toString()).toList());
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initFetchFromAPI();
   }
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context);
     OptionRow.defaultTextStyle = settingTextStyle;
     return Scaffold(
       appBar: AppBar(
