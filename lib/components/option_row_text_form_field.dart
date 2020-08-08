@@ -18,7 +18,7 @@ class OptionRowTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String buffer = '';
+    String buffer = controller != null ? controller.text : (initialValue ?? '');
     return OptionRow(
       title: title,
       control: SizedBox(

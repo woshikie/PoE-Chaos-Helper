@@ -11,7 +11,7 @@ PoeCompactStash _$PoeCompactStashFromJson(Map<String, dynamic> json) {
     json['n'] as String,
     json['id'] as String,
     json['i'] as int,
-    PoeCompactStash._colorFromJson(json['color']),
+    PoeCompactStash._colorFromJson(json['colour']),
   );
 }
 
@@ -20,5 +20,5 @@ Map<String, dynamic> _$PoeCompactStashToJson(PoeCompactStash instance) =>
       'n': instance.n,
       'id': instance.id,
       'i': instance.index,
-      'color': PoeCompactStash._colorToJson(instance.color),
+      'colour': PoeCompactStash._colorToJson(instance.colour),
     };

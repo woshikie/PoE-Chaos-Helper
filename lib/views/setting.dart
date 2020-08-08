@@ -155,7 +155,7 @@ class _SettingsState extends State<Settings> {
                 itemCount: stashes.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                    color: stashes[index].color,
+                    color: stashes[index].colour,
                     child: CheckboxListTile(
                       value: (selectedTabs.contains(stashes[index].id)),
                       onChanged: (isChecked) {
@@ -293,9 +293,15 @@ class _SettingsState extends State<Settings> {
     _poesessidController.text = poesessid;
   }
 
+  bool isInitStashTabsDone = true;
   Future<void> initStashTabs() async {
+    if (!isInitStashTabsDone) return;
+    isInitStashTabsDone = false;
     final required = [selectedLeague, selectedRealm, accountName];
-    if (required.any((element) => (element == null))) return;
+    if (required.any((element) => (element == null))) {
+      isInitStashTabsDone = true;
+      return;
+    }
     setState(() {
       stashes = null;
     });
@@ -305,6 +311,7 @@ class _SettingsState extends State<Settings> {
       accountName: accountName,
     );
     setState(() {});
+    isInitStashTabsDone = true;
   }
 
   Future<void> initSelectedStashTabs() async {

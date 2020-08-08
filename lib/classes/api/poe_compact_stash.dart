@@ -14,10 +14,10 @@ class PoeCompactStash {
   final int index;
 
   @JsonKey(fromJson: _colorFromJson, toJson: _colorToJson)
-  final Color color;
+  final Color colour;
 
   static Color _colorFromJson(dynamic json) {
-    return Color.fromARGB(255, json.r, json.g, json.b);
+    return Color.fromARGB(255, json['r'], json['g'], json['b']);
   }
 
   static Map<String, int> _colorToJson(Color color) {
@@ -28,7 +28,7 @@ class PoeCompactStash {
     };
   }
 
-  PoeCompactStash(this.n, this.id, this.index, this.color);
+  PoeCompactStash(this.n, this.id, this.index, this.colour);
 
   factory PoeCompactStash.fromJson(Map<String, dynamic> json) => _$PoeCompactStashFromJson(json);
   Map<String, dynamic> toJson() => _$PoeCompactStashToJson(this);
