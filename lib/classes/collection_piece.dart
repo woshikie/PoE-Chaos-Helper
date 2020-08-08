@@ -14,26 +14,29 @@ class CollectionPiece {
   int _count;
 
   ///Count required to be a set
-  int _setCount;
+  int setRequiredCount;
+
   CollectionPiece({
     @required this.name,
     int count,
     int setCount,
   })  : _count = count == null ? 0 : count,
-        _setCount = setCount == null ? 1 : setCount;
+        setRequiredCount = setCount == null ? 1 : setCount;
 
   factory CollectionPiece.fromJson(Map<String, dynamic> json) => _$CollectionPieceFromJson(json);
   Map<String, dynamic> toJson() => _$CollectionPieceToJson(this);
 
   /// returns [true] if there is enough counts of this piece to be considered a set
   bool get hasSet {
-    return _count >= _setCount;
+    if (setRequiredCount == null) return false;
+    return _count >= setRequiredCount;
   }
 
   /// returns number of set
+  @JsonKey(ignore: true)
   int get setCount {
     try {
-      return (_count / _setCount).floor();
+      return (_count / setRequiredCount).floor();
     } catch (e) {
       return 0;
     }
@@ -50,7 +53,7 @@ class CollectionPiece {
   }
 
   void removeSet({times = 1}) {
-    _count -= (_setCount * times);
+    _count -= (setRequiredCount * times);
     assert(_count >= 0, 'Removed too much sets!');
   }
 }

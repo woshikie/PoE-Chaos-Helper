@@ -10,13 +10,12 @@ CollectionPiece _$CollectionPieceFromJson(Map<String, dynamic> json) {
   return CollectionPiece(
     name: json['name'] as String,
     count: json['count'] as int,
-    setCount: json['setCount'] as int,
-  );
+  )..setRequiredCount = json['setRequiredCount'] as int;
 }
 
 Map<String, dynamic> _$CollectionPieceToJson(CollectionPiece instance) =>
     <String, dynamic>{
       'name': instance.name,
-      'setCount': instance.setCount,
+      'setRequiredCount': instance.setRequiredCount,
       'count': instance.count,
     };

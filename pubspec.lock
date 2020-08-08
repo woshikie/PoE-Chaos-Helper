@@ -14,7 +14,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.39.15"
+    version: "0.39.14"
   archive:
     dependency: transitive
     description:
@@ -72,7 +72,7 @@ packages:
     source: hosted
     version: "2.1.4"
   build_resolvers:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: build_resolvers
       url: "https://pub.dartlang.org"
@@ -84,7 +84,7 @@ packages:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.10.0"
+    version: "1.10.1"
   build_runner_core:
     dependency: transitive
     description:
@@ -638,5 +638,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.9.0-14.0.dev <3.0.0"
+  dart: ">=2.9.0 <3.0.0"
   flutter: ">=1.12.13+hotfix.5 <2.0.0"

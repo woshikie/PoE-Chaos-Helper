@@ -70,10 +70,12 @@ class _HomeState extends State<Home> {
     List<List<String>> resultList = await Future.wait(futures);
     List<String> results = resultList.expand((element) => element).toList();
     setState(() {
+      collection.clearAll();
       for (int i = 0; i < patterns.length; i++) {
         //collection.pieces[i].count = min(collection.pieces[i].count, results.where((element) => element.contains(patterns[i])).toList().length);
         collection.pieces[i].count = results.where((element) => element.contains(patterns[i])).toList().length;
       }
+      saveCollection();
     });
 
     _timer = Timer(Duration(milliseconds: Home.REFRESH_DELAY), fetchAPI);
